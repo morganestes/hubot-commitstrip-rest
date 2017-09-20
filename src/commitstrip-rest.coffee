@@ -14,6 +14,7 @@
 #   morganestes
 
 cheerio = require('cheerio')
+url = 'https://www.commitstrip.com/en/wp-json/wp/v2'
 
 module.exports = (robot) ->
   robot.respond /commitstrip( current)?$/i, (res) ->
@@ -21,9 +22,10 @@ module.exports = (robot) ->
     today = new Date()
     console.log 'I heard ya'
 
-    robot.http('https://www.commitstrip.com')
+    robot.http("#{url}/posts?per_page=1")
       .header('Accept', 'application/json')
-      .get('/en/wp-json/wp/v2/posts?per_page=1&_embed') (err, response, body) ->
+      .get() (err, response, body) ->
+        throw err if err
         totalPosts = response.headers['x-wp-total']
 
         if parseInt(totalPosts, 10) == 0
