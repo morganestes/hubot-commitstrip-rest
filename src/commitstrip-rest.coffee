@@ -27,7 +27,7 @@ module.exports = (robot) ->
         throw err if err
         totalPosts = response.headers['x-wp-total']
 
-        if parseInt(totalPosts, 10) == 0
+        if parseInt(totalPosts, 10) == 0 or response.statusCode is 404
           res.send 'no comic found'
           return
 
