@@ -18,7 +18,6 @@ url = 'https://www.commitstrip.com/en/wp-json/wp/v2'
 
 module.exports = (robot) ->
   robot.respond /commitstrip( current)?$/i, (res) ->
-    room = res.envelope.user.name
     today = new Date()
 
     robot.http("#{url}/posts?per_page=1")
