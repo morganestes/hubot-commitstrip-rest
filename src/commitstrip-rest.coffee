@@ -20,7 +20,6 @@ module.exports = (robot) ->
   robot.respond /commitstrip( current)?$/i, (res) ->
     room = res.envelope.user.name
     today = new Date()
-    console.log 'I heard ya'
 
     robot.http("#{url}/posts?per_page=1")
       .header('Accept', 'application/json')
