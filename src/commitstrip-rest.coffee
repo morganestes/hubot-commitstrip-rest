@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   hubot commitstrip - gets the URL of the most recent Commit Strip comic image
+#   hubot commitstrip (current) - gets the URL of the most recent Commit Strip comic image
 #
 # Author:
 #   morganestes
@@ -16,7 +16,7 @@
 cheerio = require('cheerio')
 
 module.exports = (robot) ->
-  robot.respond /commitstrip/i, (res) ->
+  robot.respond /commitstrip( current)?$/i, (res) ->
     room = res.envelope.user.name
     today = new Date()
     console.log 'I heard ya'
