@@ -31,11 +31,11 @@ module.exports = (robot) ->
           res.send 'no comic found'
           return
 
-        #parse there response into JSON and get the first element
+        # Parse the response into JSON and get the first element.
         posts = JSON.parse(body)
         post = posts[0]
 
-        # load the post content and scrape the image source
+        # Load the post content and scrape the image source.
         $ = cheerio.load(post.content.rendered)
         image = $('img').attr('src')
 
