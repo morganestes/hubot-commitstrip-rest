@@ -3,6 +3,7 @@
 #
 # Dependencies:
 # "cheerio": "^1.0.0-rc.2"
+# "wpapi": "^1.1.2"
 #
 # Configuration:
 #   None
@@ -15,11 +16,9 @@
 #   morganestes
 
 cheerio = require('cheerio')
-baseUrl = 'https://www.commitstrip.com/en/wp-json/wp/v2'
+WPAPI = require('wpapi')
 
-sendComic = (robot, res, body, postNumber = 0) ->
-  posts = JSON.parse(body)
-  post = posts[postNumber]
+sendComic = (robot, res, post) ->
 
   if post is 'undefined'
     res.send 'no comic found'
@@ -35,23 +34,17 @@ sendComic = (robot, res, body, postNumber = 0) ->
   robot.messageRoom room, post.title.rendered
 
 module.exports = (robot) ->
+  wp = new WPAPI {endpoint: 'http://www.commitstrip.com/en/wp-json'}
 
   # Gets the current comic.
   robot.respond /commitstrip( current)?$/i, (res) ->
-    robot.http("#{baseUrl}/posts?per_page=1")
-      .header('Accept', 'application/json')
-      .get() (err, response, body) ->
-        if err
-          res.send "Encountered an error :( #{err}"
-          return
+    wp.posts().perPage(1)
+      .then (data) ->
+        post = data[0]
+        sendComic robot, res, post
 
-        totalPosts = parseInt(response.headers['X-WP-Total'], 10)
-
-        if totalPosts == 0 or response.statusCode isnt 200
-          res.send 'no comics found'
-          return
-        else
-          sendComic robot, res, body
+      .catch (err) ->
+        res.send "Encountered an error :( #{err}"
 
   # Gets a random comic.
   robot.respond /commitstrip random$/i, (res) ->
