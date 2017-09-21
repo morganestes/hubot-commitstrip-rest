@@ -17,7 +17,7 @@
 cheerio = require('cheerio')
 baseUrl = 'https://www.commitstrip.com/en/wp-json/wp/v2'
 
-sendComic = (res, body, postNumber = 0) ->
+sendComic = (robot, res, body, postNumber = 0) ->
   posts = JSON.parse(body)
   post = posts[postNumber]
 
@@ -30,6 +30,9 @@ sendComic = (res, body, postNumber = 0) ->
   image = $('img').attr('src')
 
   if image != '' then res.send image
+
+  room = res.envelope.user.name
+  robot.messageRoom room, post.title.rendered
 
 module.exports = (robot) ->
 
@@ -48,7 +51,7 @@ module.exports = (robot) ->
           res.send 'no comics found'
           return
         else
-          sendComic res, body
+          sendComic robot, res, body
 
   # Gets a random comic.
   robot.respond /commitstrip random$/i, (res) ->
@@ -78,4 +81,4 @@ module.exports = (robot) ->
 
               # Generate a random number 0...9 to get a post.
               postNumber = parseInt(Math.random(0, 9) * 10, 10)
-              sendComic res, body, postNumber
+              sendComic robot, res, body, postNumber
