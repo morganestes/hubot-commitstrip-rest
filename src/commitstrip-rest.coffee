@@ -8,35 +8,74 @@
 #   None
 #
 # Commands:
-#   hubot commitstrip (current) - gets the URL of the most recent Commit Strip comic image
+#   hubot commitstrip (current) - gets the URL of the most recent Commit Strip
+#   hubot commitstrip random - gets the URL of a random Commit Strip comic
 #
 # Author:
 #   morganestes
 
 cheerio = require('cheerio')
-url = 'https://www.commitstrip.com/en/wp-json/wp/v2'
+baseUrl = 'https://www.commitstrip.com/en/wp-json/wp/v2'
+
+sendComic = (res, body, postNumber = 0) ->
+  posts = JSON.parse(body)
+  post = posts[postNumber]
+
+  if post is 'undefined'
+    res.send 'no comic found'
+    return
+
+  # Load the post content and scrape the image source.
+  $ = cheerio.load(post.content.rendered)
+  image = $('img').attr('src')
+
+  if image != '' then res.send image
 
 module.exports = (robot) ->
-  robot.respond /commitstrip( current)?$/i, (res) ->
-    today = new Date()
 
-    robot.http("#{url}/posts?per_page=1")
+  # Gets the current comic.
+  robot.respond /commitstrip( current)?$/i, (res) ->
+    robot.http("#{baseUrl}/posts?per_page=1")
       .header('Accept', 'application/json')
       .get() (err, response, body) ->
-        throw err if err
-        totalPosts = response.headers['x-wp-total']
-
-        if parseInt(totalPosts, 10) == 0 or response.statusCode is 404
-          res.send 'no comic found'
+        if err
+          res.send "Encountered an error :( #{err}"
           return
 
-        # Parse the response into JSON and get the first element.
-        posts = JSON.parse(body)
-        post = posts[0]
+        totalPosts = parseInt(response.headers['X-WP-Total'], 10)
 
-        # Load the post content and scrape the image source.
-        $ = cheerio.load(post.content.rendered)
-        image = $('img').attr('src')
+        if totalPosts == 0 or response.statusCode isnt 200
+          res.send 'no comics found'
+          return
+        else
+          sendComic res, body
 
-        if image != '' then res.send image
-        return
+  # Gets a random comic.
+  robot.respond /commitstrip random$/i, (res) ->
+    robot.http("#{baseUrl}/posts")
+      .header('Accept', 'application/json')
+      .get() (err, response, body) ->
+        if err
+          res.send "Encountered an error :( #{err}"
+          return
+
+        totalPosts = parseInt( response.headers['X-WP-Total'], 10)
+        totalPages = parseInt( response.headers['X-WP-TotalPages'], 10)
+
+        if totalPosts == 0 or response.statusCode isnt 200
+          res.send 'no comics found'
+          return
+        else
+          # Generate a random number from the number of pages to get a post.
+          pageNumber = parseInt(Math.random(1, totalPages) * 100, 10)
+
+          robot.http("#{baseUrl}/posts?page=#{pageNumber}")
+            .header('Accept', 'application/json')
+            .get() (err, response, body) ->
+              if err
+                res.send "Encountered an error :( #{err}"
+                return
+
+              # Generate a random number 0...9 to get a post.
+              postNumber = parseInt(Math.random(0, 9) * 10, 10)
+              sendComic res, body, postNumber
