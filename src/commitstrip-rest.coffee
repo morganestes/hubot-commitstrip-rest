@@ -48,30 +48,26 @@ module.exports = (robot) ->
 
   # Gets a random comic.
   robot.respond /commitstrip random$/i, (res) ->
-    robot.http("#{baseUrl}/posts")
-      .header('Accept', 'application/json')
-      .get() (err, response, body) ->
-        if err
-          res.send "Encountered an error :( #{err}"
-          return
+    # Find out how many posts there are, each on its own page.
 
-        totalPosts = parseInt( response.headers['X-WP-Total'], 10)
-        totalPages = parseInt( response.headers['X-WP-TotalPages'], 10)
+    wp.posts()
+      .then (data) ->
+        totalPages = data._paging.totalPages
+        pageNumber = Math.floor(Math.random() * totalPages) + 1
 
-        if totalPosts == 0 or response.statusCode isnt 200
-          res.send 'no comics found'
-          return
-        else
-          # Generate a random number from the number of pages to get a post.
-          pageNumber = parseInt(Math.random(1, totalPages) * 100, 10)
+        # Get a single post from the collection of posts on the page
+        wp.posts().page(pageNumber)
+          .then (data) ->
+            postsIndex = Math.floor(Math.random() * 10)
 
-          robot.http("#{baseUrl}/posts?page=#{pageNumber}")
-            .header('Accept', 'application/json')
-            .get() (err, response, body) ->
-              if err
-                res.send "Encountered an error :( #{err}"
-                return
+            post = data[postsIndex]
+            sendComic robot, res, post
 
-              # Generate a random number 0...9 to get a post.
-              postNumber = parseInt(Math.random(0, 9) * 10, 10)
-              sendComic robot, res, body, postNumber
+          .catch (err) ->
+            console.log Object(err)
+            res.send "Encountered an error :( #{err}"
+
+
+      .catch (err) ->
+        console.log Object(err)
+        res.send "Encountered an error :( #{err}"
