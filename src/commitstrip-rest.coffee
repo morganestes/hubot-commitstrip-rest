@@ -1,5 +1,5 @@
 # Description:
-#   Displays the most recent comic from the Commit Strip website.
+#   Displays a comic from the Commit Strip website.
 #
 # Dependencies:
 # "cheerio": "^1.0.0-rc.2"
