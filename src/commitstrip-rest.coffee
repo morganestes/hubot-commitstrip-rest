@@ -47,7 +47,7 @@ module.exports = (robot) ->
         res.send "Encountered an error :( #{err}"
 
   # Gets a random comic.
-  robot.respond /commitstrip random$/i, (res) ->
+  robot.respond /commitstrip rand(om)?$/i, (res) ->
     # Find out how many posts there are, each on its own page.
 
     wp.posts()
