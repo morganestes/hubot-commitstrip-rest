@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Morgan Estes <morgan.estes@gmail.com>",
   "license": "MIT",
-  "keywords": "hubot, hubot-scripts, comics",
+  "keywords": "hubot, hubot-scripts, comics, wp-rest-api",
   "repository": {
     "type": "git",
     "url": "git://github.com/morganestes/hubot-commitstrip-rest.git"
