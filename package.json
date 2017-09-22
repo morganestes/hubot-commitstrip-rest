@@ -1,7 +1,7 @@
 {
   "name": "hubot-commitstrip-rest",
   "description": "Displays the most recent comic from the Commit Strip website.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Morgan Estes <morgan.estes@gmail.com>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts, comics, wp-rest-api",
