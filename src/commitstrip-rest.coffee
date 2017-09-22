@@ -28,10 +28,7 @@ sendComic = (robot, res, post) ->
   $ = cheerio.load(post.content.rendered)
   image = $('img').attr('src')
 
-  if image != '' then res.send image
-
-  room = res.envelope.user.name
-  robot.messageRoom room, post.title.rendered
+  if image != '' then res.send image, post.title.rendered
 
 module.exports = (robot) ->
   wp = new WPAPI {endpoint: 'http://www.commitstrip.com/en/wp-json'}
