@@ -37,7 +37,7 @@ module.exports = (robot) ->
   wp = new WPAPI {endpoint: 'http://www.commitstrip.com/en/wp-json'}
 
   # Gets the current comic.
-  robot.respond /commitstrip( current)?$/i, (res) ->
+  robot.respond /commitstrip\s?(current|latest)?$/i, (res) ->
     wp.posts().perPage(1)
       .then (data) ->
         post = data[0]
