@@ -9,8 +9,8 @@
 #   None
 #
 # Commands:
-#   hubot commitstrip (current) - gets the URL of the most recent Commit Strip
-#   hubot commitstrip random - gets the URL of a random Commit Strip comic
+#   hubot commitstrip (current|latest) - gets the most recent Commit Strip
+#   hubot commitstrip (random|rand) - gets a random Commit Strip comic
 #
 # Author:
 #   morganestes
