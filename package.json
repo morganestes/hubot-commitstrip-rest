@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "wpapi": "^1.1.2"
+    "wpapi": "^1.1.2",
+    "@snyk/protect": "latest"
   },
   "peerDependencies": {
     "hubot": "2.x"
@@ -37,6 +38,9 @@
   },
   "main": "index.coffee",
   "scripts": {
-    "test": "grunt test"
-  }
+    "test": "grunt test",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
+  },
+  "snyk": true
 }
