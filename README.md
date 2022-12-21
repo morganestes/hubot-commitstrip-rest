@@ -1,3 +1,5 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 # hubot-commitstrip-rest
 
 Displays a comic from the Commit Strip website, using the WordPress REST API.
