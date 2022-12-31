@@ -15,7 +15,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "wpapi": "^1.1.2",
-    "@snyk/protect": "latest"
+    "@snyk/protect": "1.1069.0"
   },
   "peerDependencies": {
     "hubot": "2.x"
