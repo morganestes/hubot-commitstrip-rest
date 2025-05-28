@@ -13,8 +13,8 @@
     "url": "https://github.com/morganestes/hubot-commitstrip-rest/issues"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
-    "wpapi": "^1.1.2",
+    "cheerio": "^1.0.0",
+    "wpapi": "^1.2.0",
     "@snyk/protect": "latest"
   },
   "peerDependencies": {
